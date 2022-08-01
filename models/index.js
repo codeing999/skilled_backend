@@ -1,5 +1,9 @@
 'use strict';
 
+import user from './user.js';
+import note from './note.js';
+import comment from './comment.js';
+
 const fs = require('fs');
 const path = require('path');
 const Sequelize = require('sequelize');
@@ -7,6 +11,7 @@ const basename = path.basename(__filename);
 const env = process.env.NODE_ENV || 'development';
 const config = require(__dirname + '/../config/config.json')[env];
 const db = {};
+
 
 let sequelize;
 if (config.use_env_variable) {
@@ -34,4 +39,33 @@ Object.keys(db).forEach(modelName => {
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
 
-module.exports = db;
+user.hasMany(note, {
+  foreignKey: 'userid',
+  allowNull: false,
+  constraints: true,
+  onDelete: 'cascade'
+});
+note.belongsTo(user, {
+  foreignKey: 'userid'
+});
+note.hasMany(comment, {
+  foreignKey: 'noteid',
+  allowNull: false,
+  constraints: true,
+  onDelete: 'cascade'
+});
+comment.belongsTo(comment, {
+  foreignKey: 'noteid'
+});
+
+Chat.sync({
+  force: process.env.TABLE_CREATE_ALWAYS === 'true', // true : (drop) table 데이터 없어질 수 있음
+  alter: process.env.TABLE_ALTER_SYNC === 'true'     // 개발 끝나면 false로 하기
+})
+Participant.sync({
+  force: process.env.TABLE_CREATE_ALWAYS === 'true', // true : (drop) table 데이터 없어질 수 있음
+  alter: process.env.TABLE_ALTER_SYNC === 'true'     // 개발 끝나면 false로 하기
+})
+
+
+module.exports = db, user, note, comment;

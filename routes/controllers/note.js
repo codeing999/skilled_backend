@@ -4,7 +4,7 @@ import * as utils from "../../modules/utils.js";
 
 
 const postNote = async (req, res, next) => {
-
+    console.log(req.body );
     try {
 
         const noteDto = await Joi.object({
@@ -61,8 +61,15 @@ const putNoteByNoteId = async (req, res, next) => {
 
     try {
 
-        return res.json("나중에 db연결하면 할거");
+        const noteDto = await Joi.object({
+            title : Joi.string().min(1).max(50).required(),
+            content : Joi.string().min(1).max(255).required()
+        }).validateAsync({ ...req.body });
 
+        //const note = await noteQuery.postNoteQuery(noteDto);
+        return res.status(201).json(
+            utils.createJson(true, 'Note is created', note));
+    
     } catch (err) {
 
         console.error(err);
