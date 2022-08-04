@@ -9,6 +9,6 @@ const createJson = (Boolean, message, queryResult, token) => {
     }
 }
 
-export {
-    createJson,
+module.exports = {
+    createJson
 }

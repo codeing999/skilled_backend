@@ -1,7 +1,7 @@
 'use strict';
-const comment = {
+module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('comments', {
+    await queryInterface.createTable('comment', {
       commentid: {
         allowNull: false,
         autoIncrement: true,
@@ -10,9 +10,6 @@ const comment = {
       },
       content: {
         type: Sequelize.STRING
-      },
-      createdat: {
-        type: Sequelize.DATE
       },
       createdAt: {
         allowNull: false,
@@ -25,10 +22,7 @@ const comment = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('comments');
+    await queryInterface.dropTable('comment');
   }
 };
 
-export {
-  comment
-}

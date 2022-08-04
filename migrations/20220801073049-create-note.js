@@ -1,7 +1,7 @@
 'use strict';
-const note = {
+module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('notes', {
+    await queryInterface.createTable('note', {
       noteid: {
         allowNull: false,
         autoIncrement: true,
@@ -13,9 +13,6 @@ const note = {
       },
       content: {
         type: Sequelize.STRING
-      },
-      createdat: {
-        type: Sequelize.DATE
       },
       like: {
         type: Sequelize.INTEGER
@@ -31,10 +28,7 @@ const note = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('notes');
+    await queryInterface.dropTable('note');
   }
 };
 
-export {
-  note
-}

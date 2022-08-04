@@ -1,6 +1,6 @@
-import { Router } from "express";
+const Router = require("express");
 
-import * as joinController from "../controllers/join.js";
+const joinController = require("../controllers/join.js");
 
 const joinRouter = Router();
 
@@ -8,4 +8,4 @@ joinRouter.route('')
     .post(joinController.join);
 
 
-export default joinRouter;
+module.exports = joinRouter;

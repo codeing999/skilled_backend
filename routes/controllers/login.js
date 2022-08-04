@@ -1,7 +1,10 @@
-import jwt from "jsonwebtoken";
+const jwt = require("jsonwebtoken");
+
+const { User } = require("../../models");
+
 const login = async (req, res) => {
-    const { email, password } = req.body;
-    const user = await User.findOne({ email });
+    const { nickname, password } = req.body;
+    const user = await User.findOne( {where : { nickname, password }});
     // NOTE: 인증 메세지는 자세히 설명하지 않는것을 원칙으로 한다: https://cheatsheetseries.owasp.org/cheatsheets/Authentication_Cheat_Sheet.ht
     if (!user || password !== user.password) {
         res.status(400).send({
@@ -9,13 +12,10 @@ const login = async (req, res) => {
         });
         return;
     }
+
     res.send({
-        token: jwt.sign({ userId: user.userId }, "customized-secret-key"),
+        token: jwt.sign({ userid: user.userid }, "customized-secret-key"),
     });
 };
 
-export {
-
-    login
-
-}
+module.exports = {login};

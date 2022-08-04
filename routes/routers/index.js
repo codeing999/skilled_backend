@@ -1,9 +1,9 @@
-import express from "express";
+const express = require("express");
 
-import joinRouter from "./join.js";
-import loginRouter from "./auth.js";
-import noteRouter from "./note.js";
-import commentRouter from "./comment.js";
+const joinRouter = require("./join.js");
+const loginRouter = require("./auth.js");
+const noteRouter = require("./note.js");
+const commentRouter =  require("./comment.js");
 
 const router = express.Router();
 
@@ -12,4 +12,4 @@ router.use('/login', loginRouter);
 router.use('/note', noteRouter);
 router.use('/comment', commentRouter);
 
-export default router;
+module.exports = router;

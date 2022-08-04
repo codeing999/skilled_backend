@@ -1,9 +1,5 @@
 'use strict';
 
-import user from './user.js';
-import note from './note.js';
-import comment from './comment.js';
-
 const fs = require('fs');
 const path = require('path');
 const Sequelize = require('sequelize');
@@ -36,36 +32,25 @@ Object.keys(db).forEach(modelName => {
   }
 });
 
+db.User = require('./user.js')(sequelize, Sequelize);
+db.Note = require('./note.js')(sequelize, Sequelize);
+db.Comment = require('./comment.js')(sequelize, Sequelize);
+db.Like = require('./like.js')(sequelize, Sequelize);
+
+db.Note.hasMany(db.Like);
+db.Like.belongsTo(db.Note, {
+  foreignKey: "fk_note_id"
+});
+db.User.hasMany(db.Like, { as: "L" });
+db.Like.belongsTo(db.User, {
+  foreignKey: "fk_user_id",
+  as: "userid"
+});
+
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
 
-user.hasMany(note, {
-  foreignKey: 'userid',
-  allowNull: false,
-  constraints: true,
-  onDelete: 'cascade'
-});
-note.belongsTo(user, {
-  foreignKey: 'userid'
-});
-note.hasMany(comment, {
-  foreignKey: 'noteid',
-  allowNull: false,
-  constraints: true,
-  onDelete: 'cascade'
-});
-comment.belongsTo(comment, {
-  foreignKey: 'noteid'
-});
-
-Chat.sync({
-  force: process.env.TABLE_CREATE_ALWAYS === 'true', // true : (drop) table 데이터 없어질 수 있음
-  alter: process.env.TABLE_ALTER_SYNC === 'true'     // 개발 끝나면 false로 하기
-})
-Participant.sync({
-  force: process.env.TABLE_CREATE_ALWAYS === 'true', // true : (drop) table 데이터 없어질 수 있음
-  alter: process.env.TABLE_ALTER_SYNC === 'true'     // 개발 끝나면 false로 하기
-})
 
 
-module.exports = db, user, note, comment;
+
+module.exports = db;

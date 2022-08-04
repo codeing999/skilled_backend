@@ -1,12 +1,14 @@
-import { Router } from "express";
+const Router = require("express");
 
-import * as commentController from "../controllers/comment.js";
-
+const authmiddleware = require("../../middlewares/auth-middleware.js");
+const commentController = require("../controllers/comment.js");
 const commentRouter = Router();
 
-commentRouter.route('/:noteId')
+commentRouter.route('/:noteid')
     .get(commentController.getCommentByNoteId)
-    .post(commentController.postCommentByNoteId)
-    .put(commentController.putCommentByCommentId)
-    .delete(commentController.deleteCommentByCommentId);
-export default commentRouter;
+    .post(authmiddleware, commentController.postCommentByNoteId)
+commentRouter.route('/:commentid')
+    .put(authmiddleware, commentController.putCommentByCommentId)
+    .delete(authmiddleware, commentController.deleteCommentByCommentId);
+
+module.exports = commentRouter;

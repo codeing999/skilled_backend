@@ -1,5 +1,10 @@
 'use strict';
-import Model from 'sequelize';
+const User = require('./user.js');
+
+const {
+  Model
+} = require('sequelize');
+const user = require('./user');
 module.exports = (sequelize, DataTypes) => {
   class note extends Model {
     /**
@@ -8,13 +13,19 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      // define association here
+      // note.belongsTo(models.User);
+      // note.hasMany(models.comment);
+      // note.hasMany(models.Like);
     }
   }
   note.init({
     noteid: {
       primaryKey: true,
+      autoIncrement: true,
       type: DataTypes.INTEGER
+    },
+    fk_user_id: {
+      type: DataTypes.INTEGER,      
     },
     title: DataTypes.STRING,
     content: DataTypes.STRING,
@@ -23,6 +34,8 @@ module.exports = (sequelize, DataTypes) => {
   }, {
     sequelize,
     modelName: 'note',
+    tableName : 'note',
+    //timestamps : false
   });
   return note;
 };
